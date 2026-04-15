@@ -1,17 +1,21 @@
 import CalcularotButton from '@/components/CalcularotButton'
 import ThemeText from '@/components/ThemeText'
 import { Colors } from '@/constants/theme'
+import { useCalculator } from '@/hooks/useCalculator'
 import { globalStyles } from '@/styles/global-styles'
 import React from 'react'
 import { View } from 'react-native'
 
 const CalculatorApp = () => {
+
+    const { formula, number, buildNumber } = useCalculator();
+
     return (
         <View style={globalStyles.calculatorContainer}>
             {/* Resultados */}
             <View style={{ paddingHorizontal: 30, paddingBottom: 20 }}>
-                <ThemeText variant='h1'>50 x 50</ThemeText>
-                <ThemeText variant='h2'>250</ThemeText>
+                <ThemeText variant='h1'>{formula}</ThemeText>
+                <ThemeText variant='h2'>{number}</ThemeText>
             </View>
 
             {/* Filas de botones */}
@@ -42,13 +46,13 @@ const CalculatorApp = () => {
                 {/* Fila 2 */}
                 <CalcularotButton
                     label="7"
-                    onPress={() => console.log('7')} />
+                    onPress={() => buildNumber('7')} />
                 <CalcularotButton
                     label="8"
-                    onPress={() => console.log('8')} />
+                    onPress={() => buildNumber('8')} />
                 <CalcularotButton
                     label="9"
-                    onPress={() => console.log('9')} />
+                    onPress={() => buildNumber('9')} />
                 <CalcularotButton
                     label="x"
                     color={Colors.orange}
@@ -59,13 +63,13 @@ const CalculatorApp = () => {
                 {/* Fila 3 */}
                 <CalcularotButton
                     label="4"
-                    onPress={() => console.log('4')} />
+                    onPress={() => buildNumber('4')} />
                 <CalcularotButton
                     label="5"
-                    onPress={() => console.log('5')} />
+                    onPress={() => buildNumber('5')} />
                 <CalcularotButton
                     label="6"
-                    onPress={() => console.log('6')} />
+                    onPress={() => buildNumber('6')} />
                 <CalcularotButton
                     label="-"
                     color={Colors.orange}
@@ -76,13 +80,13 @@ const CalculatorApp = () => {
                 {/* Fila 4 */}
                 <CalcularotButton
                     label="1"
-                    onPress={() => console.log('1')} />
+                    onPress={() => buildNumber('1')} />
                 <CalcularotButton
                     label="2"
-                    onPress={() => console.log('2')} />
+                    onPress={() => buildNumber('2')} />
                 <CalcularotButton
                     label="3"
-                    onPress={() => console.log('3')} />
+                    onPress={() => buildNumber('3')} />
                 <CalcularotButton
                     label="+"
                     color={Colors.orange}
@@ -94,10 +98,10 @@ const CalculatorApp = () => {
                 <CalcularotButton
                     label="0"
                     doubleSize
-                    onPress={() => console.log('0')} />
+                    onPress={() => buildNumber('0')} />
                 <CalcularotButton
                     label="."
-                    onPress={() => console.log('.')} />
+                    onPress={() => buildNumber('.')} />
                 <CalcularotButton
                     label="="
                     color={Colors.orange}
