@@ -1,7 +1,9 @@
 import { Colors } from '@/constants/theme';
 import { globalStyles } from '@/styles/global-styles';
+import * as Haptics from 'expo-haptics';
 import React from 'react';
 import { Pressable, Text } from 'react-native';
+
 
 interface Props {
     label: string;
@@ -25,7 +27,10 @@ const CalcularotButton = ({
                 , opacity: pressed ? 0.8 : 1
                 , width: doubleSize ? (globalStyles.button.width * 2) : (globalStyles.button.width)
             })}
-            onPress={onPress}>
+            onPress={() => {
+                Haptics.selectionAsync();
+                onPress();
+            }}>
             <Text style={{
                 ...globalStyles.buttonText,
                 color: blackText ? 'black' : Colors.textPrimary
