@@ -8,14 +8,21 @@ import { View } from 'react-native'
 
 const CalculatorApp = () => {
 
-    const { formula, number, buildNumber, clean, toogleSign, deleteLast } = useCalculator();
+    const { formula, number, buildNumber, clean, toogleSign, deleteLast, prevNumber, divideOperation, multiplyOperation, subtractOperation, addOperation } = useCalculator();
 
     return (
         <View style={globalStyles.calculatorContainer}>
             {/* Resultados */}
+
             <View style={{ paddingHorizontal: 30, paddingBottom: 20 }}>
+
                 <ThemeText variant='h1'>{formula}</ThemeText>
-                <ThemeText variant='h2'>{number}</ThemeText>
+
+                {formula === prevNumber ? (
+                    <ThemeText variant='h2'>{ }</ThemeText>
+                ) :
+                    (<ThemeText variant='h2'>{prevNumber}</ThemeText>)
+                }
             </View>
 
             {/* Filas de botones */}
@@ -39,7 +46,7 @@ const CalculatorApp = () => {
                 <CalcularotButton
                     label="÷"
                     color={Colors.orange}
-                    onPress={() => console.log('÷')} />
+                    onPress={divideOperation} />
             </View>
 
             <View style={globalStyles.row}>
@@ -56,7 +63,7 @@ const CalculatorApp = () => {
                 <CalcularotButton
                     label="x"
                     color={Colors.orange}
-                    onPress={() => console.log('x')} />
+                    onPress={multiplyOperation} />
             </View>
 
             <View style={globalStyles.row}>
@@ -73,7 +80,7 @@ const CalculatorApp = () => {
                 <CalcularotButton
                     label="-"
                     color={Colors.orange}
-                    onPress={() => console.log('-')} />
+                    onPress={subtractOperation} />
             </View>
 
             <View style={globalStyles.row}>
@@ -90,7 +97,7 @@ const CalculatorApp = () => {
                 <CalcularotButton
                     label="+"
                     color={Colors.orange}
-                    onPress={() => console.log('+')} />
+                    onPress={addOperation} />
             </View>
 
             <View style={globalStyles.row}>
