@@ -8,7 +8,7 @@ import { View } from 'react-native'
 
 const CalculatorApp = () => {
 
-    const { formula, number, buildNumber } = useCalculator();
+    const { formula, number, buildNumber, clean, toogleSign, deleteLast } = useCalculator();
 
     return (
         <View style={globalStyles.calculatorContainer}>
@@ -25,17 +25,17 @@ const CalculatorApp = () => {
                     label="C"
                     blackText
                     color={Colors.lightGray}
-                    onPress={() => console.log('C')} />
+                    onPress={clean} />
                 <CalcularotButton
                     label="+/-"
                     blackText
                     color={Colors.lightGray}
-                    onPress={() => console.log('+/-')} />
+                    onPress={toogleSign} />
                 <CalcularotButton
                     label="del"
                     blackText
                     color={Colors.lightGray}
-                    onPress={() => console.log('del')} />
+                    onPress={deleteLast} />
                 <CalcularotButton
                     label="÷"
                     color={Colors.orange}
