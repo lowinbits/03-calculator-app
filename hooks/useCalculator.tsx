@@ -16,22 +16,27 @@ export const useCalculator = () => {
             setFormula(`${firstFormulaPart} ${lastOperation.current} ${number}`);
         } else {
             setFormula(number);
+            setPrevNumber(number);
         }
 
     }, [number]);
 
 
     useEffect(() => {
-        //TODO: Consultat subResultado
-        //setFormula(number);
-    }, [number]);
+        if (!lastOperation.current) {
+            setPrevNumber(formula);
+            return;
+        }
+        const subResult = calculateSubResult();
+        setPrevNumber(subResult.toString());
+    }, [formula]);
 
 
 
     const clean = () => {
         setNumber('0');
         setPrevNumber('0');
-        setFormula('');
+        setFormula('0');
 
         lastOperation.current = undefined;
     }
@@ -45,19 +50,25 @@ export const useCalculator = () => {
 
     //el delete
     const deleteLast = () => {
+        let currentSign = '';
+        let temporalNumber = number;
 
-        if (number.length === 1 || (number.length === 2 && number.includes('-'))) {
-            return setNumber('0');
+        if (number.includes('-')) {
+            currentSign = '-';
+            temporalNumber = number.substring(1);
         }
 
-        if (number.length > 1) {
-            return setNumber(number.slice(0, -1));
+        if (temporalNumber.length > 1) {
+            return setNumber(currentSign + temporalNumber.slice(0, -1));
         }
+
+        setNumber('0');
 
     }
 
     const setLastNumber = () => {
         //TODO Calcular resultado
+        calculateResult();
 
         if (number.endsWith('.')) {
             setPrevNumber(number.slice(0, -1));
@@ -91,6 +102,36 @@ export const useCalculator = () => {
         lastOperation.current = Operator.add;
     }
 
+    const calculateSubResult = () => {
+        const [firstValue, operation, secondValue] = formula.split(' ');
+
+        const num1 = Number(firstValue);
+        const num2 = Number(secondValue); //NaN
+
+        if (isNaN(num2)) return num1;
+
+        switch (operation) {
+            case Operator.add:
+                return num1 + num2;
+            case Operator.subtract:
+                return num1 - num2;
+            case Operator.multiply:
+                return num1 * num2;
+            case Operator.divide:
+                return num1 / num2;
+            default:
+                throw new Error(`Operation ${operation} not implemented`);
+        }
+
+    }
+
+    const calculateResult = () => {
+        setFormula(prevNumber);
+        setNumber(prevNumber);
+        setPrevNumber('0');
+        lastOperation.current = undefined;
+    }
+
     const buildNumber = (numberString: string) => {
         //Verificar si ya existe el punto decimal
 
@@ -122,7 +163,7 @@ export const useCalculator = () => {
 
         setNumber(number + numberString);
 
-        console.log('numberString', { numberString });
+        //        console.log('numberString', { numberString });
     }
 
     return {
@@ -139,7 +180,9 @@ export const useCalculator = () => {
         divideOperation,
         multiplyOperation,
         subtractOperation,
-        addOperation
+        addOperation,
+        calculateSubResult,
+        calculateResult
     };
 
 }
