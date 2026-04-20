@@ -1,6 +1,8 @@
 # Calculator App
 
-A mobile calculator application built with React Native and Expo as part of a hands-on React Native course. This project focuses on core concepts such as component architecture, custom theming, global stylesheets, and file-based routing with Expo Router.
+A fully functional iPhone-style calculator built with React Native and Expo. The app replicates the look and feel of the iOS native calculator, featuring a jet-black dark theme, circular buttons, haptic feedback, real-time formula display, and support for chained arithmetic operations.
+
+This project was developed as part of a hands-on React Native course, covering custom hooks, component architecture, theming, global stylesheets, and file-based routing with Expo Router.
 
 ---
 
@@ -14,18 +16,29 @@ A mobile calculator application built with React Native and Expo as part of a ha
 | Expo Router | ~6.0.23 |
 | TypeScript | ~5.9.2 |
 | expo-font | ~14.0.11 |
+| expo-haptics | ~14.0.1 |
+| expo-navigation-bar | ~4.0.9 |
 
 ---
 
 ## Features
 
-- Dark theme UI with a custom color palette
+- iPhone-style dark UI with jet-black background and circular buttons
+- Dual-line display: real-time formula on top, active number below
+- Chained arithmetic operations with intermediate result calculation
+- Decimal number support with duplicate-dot prevention
+- Negative number toggle (+/-)
+- Delete last digit (del)
+- Clear all (C)
+- Haptic feedback on every button press via `expo-haptics`
 - Custom font loading (SpaceMono) via `expo-font`
+- Black Android navigation bar for a seamless full-screen look
 - Global stylesheet with centralized layout and typography styles
 - File-based routing with Expo Router
 - New React Native Architecture enabled (`newArchEnabled: true`)
 - Portrait-only orientation
 - Cross-platform: iOS, Android, and Web
+- Fully typed with TypeScript
 
 ---
 
@@ -34,18 +47,25 @@ A mobile calculator application built with React Native and Expo as part of a ha
 ```text
 calculator-app/
 ├── app/
-│   ├── _layout.tsx        # Root layout — font loading, global background, StatusBar
-│   └── index.tsx          # Main calculator screen
+│   ├── _layout.tsx              # Root layout — font loading, status bar, Android nav bar
+│   └── index.tsx                # Main calculator screen
 ├── assets/
 │   ├── fonts/
 │   │   └── SpaceMono-Regular.ttf
 │   └── images/
+├── components/
+│   ├── CalculatorButton.tsx     # Reusable button with haptic feedback and double-width support
+│   └── ThemeText.tsx            # Themed text component with h1/h2 variants
 ├── constants/
-│   └── theme.ts           # Color palette and font definitions
+│   └── theme.ts                 # Color palette and platform-aware font definitions
+├── enums/
+│   └── enumCalculator.ts        # Operation type enum (add, subtract, multiply, divide)
+├── hooks/
+│   └── useCalculator.tsx        # All calculator state and arithmetic logic
 ├── styles/
-│   └── global-styles.ts   # Global StyleSheet (background, container, result text)
-├── app.json               # Expo configuration
-├── tsconfig.json          # TypeScript configuration (strict mode + path aliases)
+│   └── global-styles.ts         # Global StyleSheet (layout, display, buttons, rows)
+├── app.json                     # Expo configuration
+├── tsconfig.json                # TypeScript configuration (strict mode + path aliases)
 └── package.json
 ```
 
@@ -58,11 +78,26 @@ Defined in `constants/theme.ts`:
 | Token | Value | Usage |
 | --- | --- | --- |
 | `background` | `#000000` | App background |
-| `darkGray` | `#2D2D2D` | Button backgrounds |
-| `lightGray` | `#9B9B9B` | Secondary buttons |
-| `orange` | `#FF9427` | Operator buttons |
+| `darkGray` | `#2D2D2D` | Number button backgrounds |
+| `lightGray` | `#9B9B9B` | Function buttons (C, +/-, del) |
+| `orange` | `#FF9427` | Operator and equals buttons |
 | `textPrimary` | `white` | Main result text |
-| `textSecondary` | `#666666` | Sub-result text |
+| `textSecondary` | `#666666` | Sub-result / formula text |
+
+---
+
+## Calculator Logic
+
+All arithmetic logic lives in `hooks/useCalculator.tsx`:
+
+| Feature | Implementation detail |
+| --- | --- |
+| Number building | Prevents leading zeros; validates single decimal point |
+| Chained operations | Calculates intermediate result before applying the next operator |
+| Sign toggle (+/-) | Handles both positive and negative numbers cleanly |
+| Delete | Strips last character while respecting the negative sign |
+| Formula display | Tracks `formula` state updated on every operator press |
+| Operation tracking | Uses `useRef` for `lastOperation` to avoid unnecessary re-renders |
 
 ---
 
@@ -119,6 +154,7 @@ The project uses `@/` as a root-level path alias, configured in `tsconfig.json`:
 ```ts
 import { globalStyles } from '@/styles/global-styles'
 import { Colors } from '@/constants/theme'
+import { useCalculator } from '@/hooks/useCalculator'
 ```
 
 ---
@@ -133,6 +169,10 @@ This project is part of a React Native course and covers the following concepts:
 - Loading and applying custom fonts with `expo-font`
 - Structuring a React Native app with a clean folder layout
 - Using file-based routing with `Slot` and `_layout.tsx`
+- Building a custom hook to encapsulate complex UI state and logic
+- Handling haptic feedback with `expo-haptics`
+- Controlling platform-specific UI (Android navigation bar color)
+- Implementing type-safe enums for operation management
 
 ---
 
